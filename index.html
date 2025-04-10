@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Sales Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            background: linear-gradient(to right, #1a1a2e, #16213e);
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: auto; 
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td { 
+            border: 1px solid white; 
+            padding: 10px; 
+            text-align: left; 
+            color: white;
+        }
+        th { 
+            background: rgba(255, 255, 255, 0.2);
+        }
+        button { 
+            background: #0f3460; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        button:hover { 
+            background: #e94560; 
+        }
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 5px;
+            width: 40%;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        input::placeholder {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a class="dropdown-item" href="Home2.html">Home</a></li>
+            <li><a class="dropdown-item" href="Orders2.html">Orders</a></li>
+            <li><a class="dropdown-item" href="index.html">Dashboard</a></li>
+            <li><a class="dropdown-item" href="gifts2.html">Gifts</a></li>
+            <li><a class="dropdown-item" href="Invoice2.html">Invoice</a></li>
+            <li><a class="dropdown-item" href="sales-history2.html">Sales History</a></li>
+            <li><a class="dropdown-item text-danger" href="Settings2.html">Settings</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h2>Product Sales Line Graph</h2>
+        <canvas id="salesChart"></canvas>
+
+        <h2>Manage Products</h2>
+        <input type="text" id="productName" placeholder="Product Name">
+        <input type="number" id="productSales" placeholder="Sales">
+        <button onclick="addProduct()">Add Product</button>
+        <button onclick="orderNow()">Order now</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Sales</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        let chart;
+
+        function updateChart() {
+            const labels = products.map(p => p.name);
+            const salesData = products.map(p => p.sales);
+
+            if (chart) chart.destroy();
+
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Product Sales',
+                        data: salesData,
+                        borderColor: '#e94560',
+                        backgroundColor: 'rgba(233, 69, 96, 0.3)',
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#e94560',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutBounce'
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Products', color: 'white' },
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Sales Count', color: 'white' },
+                            beginAtZero: true,
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const sales = parseInt(document.getElementById('productSales').value);
+
+            if (!name || isNaN(sales) || sales < 0) {
+                alert("Please enter a valid product name and positive sales number.");
+                return;
+            }
+
+            products.push({ name, sales });
+            localStorage.setItem('products', JSON.stringify(products));
+
+            document.getElementById('productName').value = "";
+            document.getElementById('productSales').value = "";
+
+            renderTable();
+            updateChart();
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(products));
+            renderTable();
+            updateChart();
+        }
+
+        function renderTable() {
+            const table = document.getElementById('productTable');
+            table.innerHTML = '';
+            products.forEach((p, index) => {
+                table.innerHTML += `<tr>
+                    <td>${p.name}</td>
+                    <td>${p.sales}</td>
+                    <td><button onclick="deleteProduct(${index})">Delete</button></td>
+                </tr>`;
+            });
+        }
+
+        function orderNow() {
+            if (products.length > 0) {
+                alert("Your order has been placed!");
+                window.location.href = "Orders2.html";
+            } else {
+                alert("No products added yet!");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderTable();
+            updateChart();
+        });
+    </script>
+</body>
+</html>
+

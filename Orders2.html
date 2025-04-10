@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('orders.jpg');
+        }
+        nav {
+            background: #007bff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 10px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        .table-container {
+            width: 80%;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="Home2.html">Home</a></li>
+            <li><a href="Orders2.html">Orders</a></li>
+            <li><a href="gifts2.html">Gifts</a></li>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="Invoice2.html">Invoice</a></li>
+            <li><a href="sales-history2.html">Sales History</a></li>
+            <li><a href="Settings2.html">Settings</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1> Orders</h1>
+        <input type="text" id="search-bar" placeholder="Search Orders...">
+        <button id="search-button">Search</button>
+        <button id="clear-orders">Clear Orders</button>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Customer</th>
+                        <th>Order Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-table"></tbody>
+            </table>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let ordersTable = document.getElementById('orders-table');
+            let searchInput = document.getElementById('search-bar');
+            let searchButton = document.getElementById('search-button');
+            let clearOrdersButton = document.getElementById('clear-orders');
+    
+            function loadOrders(filter = "") {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                ordersTable.innerHTML = "";
+    
+                orders
+                    .filter(order => order.product.toLowerCase().includes(filter.toLowerCase()))
+                    .forEach((order, index) => {
+                        let row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${order.product}</td>
+                            <td>${order.quantity}</td>
+                            <td>${order.customer}</td>
+                            <td>${order.date}</td>
+                            <td><button onclick="deleteOrder(${index})">Delete</button></td>
+                        `;
+                        ordersTable.appendChild(row);
+                    });
+            }
+    
+            function deleteOrder(index) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders.splice(index, 1);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                loadOrders();
+            }
+    
+            searchButton.addEventListener('click', function () {
+                loadOrders(searchInput.value);
+            });
+    
+            clearOrdersButton.addEventListener('click', function () {
+                if (confirm("Are you sure you want to clear all orders?")) {
+                    localStorage.removeItem('orders');
+                    loadOrders();
+                }
+            });
+    
+            window.addEventListener('storage', function (event) {
+                if (event.key === 'ordersUpdated') {
+                    loadOrders();
+                }
+            });
+    
+            loadOrders();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
