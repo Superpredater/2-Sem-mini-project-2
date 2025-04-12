@@ -210,21 +210,32 @@
                 </tr>`;
             });
         }
-
         function orderNow() {
-            if (products.length > 0) {
-                alert("Your order has been placed!");
-                window.location.href = "Orders2.html";
-            } else {
+            if (products.length === 0) {
                 alert("No products added yet!");
+                return;
             }
+        
+            // Convert products into orders
+            const newOrders = products.map(p => ({
+                product: p.name,
+                quantity: p.sales,
+                customer: "Self", // optional static name or add a field to get user input
+                date: new Date().toISOString().split('T')[0]
+            }));
+        
+            // Get existing orders and append new ones
+            const existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
+            const allOrders = existingOrders.concat(newOrders);
+        
+            // Save orders to localStorage
+            localStorage.setItem('orders', JSON.stringify(allOrders));
+            localStorage.setItem('ordersUpdated', Date.now());
+        
+            alert("Your order has been placed!");
+            window.location.href = "Orders2.html";
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            renderTable();
-            updateChart();
-        });
+        
     </script>
 </body>
 </html>
-
