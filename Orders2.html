@@ -118,18 +118,22 @@
                             <td>${order.quantity}</td>
                             <td>${order.customer}</td>
                             <td>${order.date}</td>
-                            <td><button onclick="deleteOrder(${index})">Delete</button></td>
+                            <td><button onclick="payNow(${index})">Pay Now</button></td>
                         `;
                         ordersTable.appendChild(row);
                     });
+    
+                if (ordersTable.children.length === 0) {
+                    ordersTable.innerHTML = '<tr><td colspan="5">No orders found.</td></tr>';
+                }
             }
     
-            function deleteOrder(index) {
+            function payNow(index) {
                 let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                orders.splice(index, 1);
-                localStorage.setItem('orders', JSON.stringify(orders));
-                loadOrders();
+                alert(`Processing payment for ${orders[index].product} (Customer: ${orders[index].customer})`);
+                // You can implement actual payment logic here
             }
+            window.payNow = payNow;
     
             searchButton.addEventListener('click', function () {
                 loadOrders(searchInput.value);
@@ -151,6 +155,7 @@
             loadOrders();
         });
     </script>
+    
 </body>
 </html>
 
