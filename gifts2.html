@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #1a1a2e, #16213e);
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        nav {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .coupon-card {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px;
+            padding: 15px;
+            border-radius: 10px;
+            display: inline-block;
+            width: 200px;
+        }
+        button {
+            background: #0f3460;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #e94560;
+        }
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="Home2.html">Home</a></li>
+            <li><a href="Orders2.html">Orders</a></li>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="gifts2.html">Coupons</a></li>
+            <li><a href="Invoice2.html">Invoice</a></li>
+            <li><a href="sales-history2.html">Sales History</a></li>
+            <li><a href="Settings2.html" class="text-danger">Settings</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>Select a Coupon</h2>
+
+        <div id="couponList">
+            <!-- Coupon Cards Will Load Here -->
+        </div>
+
+        <h3>Selected Coupon</h3>
+        <ul id="selectedCoupon" style="list-style: none; padding: 0;"></ul>
+        <button onclick="clearCoupon()">Clear Selected Coupon</button>
+    </div>
+
+    <script>
+        const coupons = [
+            { code: "DISCOUNT10", description: "10% Off" },
+            { code: "FREESHIP", description: "Free Shipping" },
+            { code: "WELCOME20", description: "20% Off First Order" },
+            { code: "SUMMER30", description: "30% Off Summer Sale" },
+            { code: "BLACKFRIDAY", description: "50% Off on Black Friday" }
+        ];
+
+        let selectedCoupon = JSON.parse(localStorage.getItem('selectedCoupon')) || [];
+
+        function renderCoupons() {
+            const couponContainer = document.getElementById('couponList');
+            couponContainer.innerHTML = '';
+            coupons.forEach(coupon => {
+                couponContainer.innerHTML += `
+                    <div class="coupon-card">
+                        <h4>${coupon.code}</h4>
+                        <p>${coupon.description}</p>
+                        <button onclick="selectCoupon('${coupon.code}')">Select Coupon</button>
+                    </div>
+                `;
+            });
+        }
+
+        function selectCoupon(couponCode) {
+            if (selectedCoupon.includes(couponCode)) {
+                alert("You've already selected this coupon.");
+                return;
+            }
+            selectedCoupon.push(couponCode);
+            localStorage.setItem('selectedCoupon', JSON.stringify(selectedCoupon));
+            renderSelectedCoupon();
+        }
+
+        function renderSelectedCoupon() {
+            const list = document.getElementById('selectedCoupon');
+            list.innerHTML = '';
+            selectedCoupon.forEach(c => {
+                list.innerHTML += `<li>🎁 ${c}</li>`;
+            });
+        }
+
+        function clearCoupon() {
+            if (confirm("Are you sure you want to clear your selected coupon?")) {
+                selectedCoupon = [];
+                localStorage.setItem('selectedCoupon', JSON.stringify(selectedCoupon));
+                renderSelectedCoupon();
+            }
+        }
+
+        // Initial Rendering
+        renderCoupons();
+        renderSelectedCoupon();
+    </script>
+</body>
+</html>
