@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invoice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- PDF Export Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    @media print {
+      nav, .btn, .badge, .d-print-none {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+        color: black !important;
+        margin: 0;
+      }
+      .card {
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    .logo {
+      max-height: 80px;
+    }
+
+    .thank-you {
+      font-style: italic;
+      font-size: 0.95rem;
+      margin-top: 30px;
+      text-align: center;
+      color: #555;
+    }
+  </style>
+</head>
+<body class="bg-light">
+
+  <!-- Navbar (Hidden on Print) -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-print-none">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">IMS</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link text-white" href="Home2.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="Orders2.html">Orders</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="index.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="gifts2.html">Gifts</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="Invoice2.html">Invoice</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="sales-history2.html">Sales History</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="Settings2.html">Settings</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Invoice Section -->
+  <div class="container my-5">
+    <div class="card shadow p-4">
+      <div class="card-body">
+
+        <!-- Logo -->
+        <div class="text-center mb-3">
+          <img src="your-logo.png" alt="Company Logo" class="logo">
+        </div>
+
+        <!-- Title -->
+        <h3 class="card-title mb-4 text-center">INVOICE</h3>
+
+        <!-- Customer Info -->
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label class="form-label">Customer Name:</label>
+            <p id="customerName">John Doe</p>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Email:</label>
+            <p id="customerEmail">john@example.com</p>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Status:</label>
+            <p id="customerStatus">Premium</p>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Address:</label>
+            <p id="customerAddress">123 Main St, City, Country</p>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <label class="form-label">Invoice No:</label>
+            <p id="invoiceNo">INV-10234</p>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Date:</label>
+            <p id="invoiceDate">2025-04-12</p>
+          </div>
+        </div>
+
+        <!-- Product Table -->
+        <h5 class="mt-4">Purchased Products</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="productsTable">
+            <thead class="table-light">
+              <tr>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Unit Price ($)</th>
+                <th>Total ($)</th>
+                <th>Coupon</th>
+              </tr>
+            </thead>
+            <tbody id="productsBody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="text-end"><strong>Subtotal</strong></td>
+                <td id="subtotalCell">$0.00</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="text-end"><strong>Tax (10%)</strong></td>
+                <td id="taxCell">$0.00</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="text-end text-danger"><strong>Coupon Savings</strong></td>
+                <td id="couponCell" class="text-danger">- $5.00</td>
+              </tr>
+              <tr class="table-secondary">
+                <td colspan="4" class="text-end"><strong>Grand Total</strong></td>
+                <td id="totalCell"><strong>$0.00</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="mt-3">
+          <label class="form-label">Payment Status:</label>
+          <span class="badge bg-success" id="paymentStatus">Paid</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-3 mt-4 d-print-none">
+          <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+          <button class="btn btn-success" onclick="emailPDF()">Email PDF</button>
+          <button class="btn btn-secondary" onclick="window.print()">Print</button>
+        </div>
+
+        <!-- Thank You Footer -->
+        <p class="thank-you">Thank you for your business! If you have any questions, contact us at support@example.com</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Invoice JS -->
+  <script>
+    const products = [
+      { name: "Wireless Mouse", quantity: 2, price: 15.00, coupon: "SAVE10" },
+      { name: "USB-C Cable", quantity: 3, price: 5.00, coupon: "-" },
+      { name: "Bluetooth Keyboard", quantity: 1, price: 25.00, coupon: "KEYBOARD5" }
+    ];
+
+    const TAX_RATE = 0.10;
+    const COUPON_DISCOUNT = 5.00;
+
+    function formatMoney(amount) {
+      return "$" + amount.toFixed(2);
+    }
+
+    function populateProducts() {
+      let tbody = document.getElementById('productsBody');
+      let subtotal = 0;
+
+      products.forEach(product => {
+        const total = product.quantity * product.price;
+        subtotal += total;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${product.name}</td>
+          <td>${product.quantity}</td>
+          <td>${formatMoney(product.price)}</td>
+          <td>${formatMoney(total)}</td>
+          <td>${product.coupon}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      const tax = subtotal * TAX_RATE;
+      const grandTotal = subtotal + tax - COUPON_DISCOUNT;
+
+      document.getElementById('subtotalCell').textContent = formatMoney(subtotal);
+      document.getElementById('taxCell').textContent = formatMoney(tax);
+      document.getElementById('couponCell').textContent = "- " + formatMoney(COUPON_DISCOUNT);
+      document.getElementById('totalCell').textContent = formatMoney(grandTotal);
+    }
+
+    function downloadPDF() {
+      const element = document.querySelector(".card");
+      html2pdf().from(element).save("invoice.pdf");
+    }
+
+    function emailPDF() {
+      alert("Email functionality coming soon!");
+    }
+
+    window.onload = populateProducts;
+  </script>
+</body>
+</html>
+
+
+
+
+
