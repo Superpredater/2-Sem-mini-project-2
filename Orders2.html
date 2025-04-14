@@ -145,19 +145,21 @@
                 }
             }
 
+           
             function payNow(index) {
                 let orders = JSON.parse(localStorage.getItem('orders')) || [];
                 const order = orders[index];
-
-                if (confirm(`Confirm payment for ${order.product} (Customer: ${order.customer})?`)) {
-                    orders[index].paid = true;
-                    localStorage.setItem('orders', JSON.stringify(orders));
-                    localStorage.setItem('ordersUpdated', Date.now()); // Sync across tabs
-                    loadOrders();
+            
+                if (confirm(`Proceed to payment for ${order.product} (Customer: ${order.customer})?`)) {
+                    // Store the selected order index or full order details for use on payqr.html
+                    localStorage.setItem('payOrderIndex', index);
+                    // Redirect to payqr.html
+                    window.location.href = 'payqr.html';
                 }
             }
-
+            
             window.payNow = payNow;
+            
 
             searchButton.addEventListener('click', function () {
                 loadOrders(searchInput.value);
