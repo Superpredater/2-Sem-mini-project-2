@@ -26,14 +26,30 @@
             max-height: 300px;
             overflow-y: auto;
             margin-top: 20px;
+            border-radius: 5px;
+        }
+        
+        /* Add this for sticky header support */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; /* <-- This helps sticky headers behave more reliably */
         }
         
         thead th {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.8); /* higher opacity for readability */
+            color: black; /* to contrast better */
             z-index: 10;
-        }             
+            backdrop-filter: blur(5px); /* Optional: for a modern glassy look */
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
         nav {
             background: rgba(250, 247, 247, 0.895);
             padding: 10px;
@@ -59,6 +75,12 @@
             text-decoration: none;
             font-weight: bold;
         }
+        nav img {
+            height: 35px; /* Adjust logo size */
+            margin-right: 25px;
+            margin-top:5px;
+            border-radius:50%;
+          }
         table { 
             width: 100%; 
             border-collapse: collapse; 
@@ -105,13 +127,16 @@
 <body>
     <nav>
         <ul>
-            <li><a class="dropdown-item" href="Home2.html">Home</a></li>
-            <li><a class="dropdown-item" href="Orders2.html">Orders</a></li>
-            <li><a class="dropdown-item" href="index.html">Dashboard</a></li>
-            <li><a class="dropdown-item" href="gifts2.html">Gifts</a></li>
-            <li><a class="dropdown-item" href="Invoice2.html">Invoice</a></li>
-            <li><a class="dropdown-item" href="sales-history2.html">Sales History</a></li>
-            <li><a class="dropdown-item text-danger" href="Settings2.html">Settings</a></li>
+            <div class="top-nav d-flex align-items-center">
+                <img src="logo3.jpg" alt="Logo" class="logo1"> 
+             <li><a class="dropdown-item" href="Home2.html">Home</a></li>
+             <li><a class="dropdown-item" href="Orders2.html">Orders</a></li>
+             <li><a class="dropdown-item" href="index.html">Dashboard</a></li>
+             <li><a class="dropdown-item" href="gifts2.html">Gifts</a></li>
+             <li><a class="dropdown-item" href="Invoice2.html">Invoice</a></li>
+             <li><a class="dropdown-item" href="sales-history2.html">Sales History</a></li>
+             <li><a class="dropdown-item text-danger" href="Settings2.html">Settings</a></li>
+            </div>
         </ul>
     </nav>
     
