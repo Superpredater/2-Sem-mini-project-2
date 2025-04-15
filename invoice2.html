@@ -12,61 +12,114 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
-    @media print {
-      nav, .btn, .badge, .d-print-none {
-        display: none !important;
-      }
-      body {
-        background: white !important;
-        color: black !important;
+    body { 
+        font-family: Arial, sans-serif; 
+        text-align: center; 
+        background: linear-gradient(to right, #1a1a2e, #16213e);
+        color: white;
         margin: 0;
-      }
-      .card {
-        border: none !important;
-        box-shadow: none !important;
-      }
+        padding: 20px;
     }
-
-    @page {
-      size: A4;
-      margin: 20mm;
+    .container { 
+        max-width: 800px; 
+        margin: auto; 
+        background: rgba(255, 255, 255, 0.7);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(130, 128, 128, 0.5);
     }
-
-    .logo {
-      max-height: 80px;
+    nav {
+        background: rgb(255, 255, 255);
+        padding: 10px;
+        text-align: center;
     }
-
-    .thank-you {
-      font-style: italic;
-      font-size: 0.95rem;
-      margin-top: 30px;
-      text-align: center;
-      color: #555;
+    nav ul {
+        list-style: none;
+        padding: 0;
     }
-  </style>
+    nav ul li {
+        display: inline;
+        margin: 0 10px;
+    }
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    nav.navbar {
+      border-radius: 10px;
+      margin: 10px auto;
+      width: 95%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    table { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 20px; 
+        background: rgb(255, 255, 255);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    th, td { 
+        border: 1px solid white; 
+        padding: 10px; 
+        text-align: left; 
+        color: white;
+    }
+    th { 
+        background: rgba(255, 255, 255, 0.2);
+    }
+    button { 
+        background: #ffffff; 
+        color: rgb(0, 0, 0); 
+        border: none; 
+        padding: 10px 15px; 
+        cursor: pointer;
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+    button:hover { 
+        background: #e94560; 
+    }
+    input {
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        margin: 5px;
+        width: 40%;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    input::placeholder {
+        color: #ccc;
+    }
+</style>
 </head>
 <body class="bg-light">
+<!-- Navbar (Visible, now white with black text) -->
+<nav class="navbar navbar-expand-lg navbar-light bg- rgba(250, 247, 247, 0.895)d-print-none">
+  <div class="container-fluid">
 
-  <!-- Navbar (Hidden on Print) -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-print-none">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">IMS</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link text-white" href="Home2.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="Orders2.html">Orders</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="index.html">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="gifts2.html">Gifts</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="Invoice2.html">Invoice</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="sales-history2.html">Sales History</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="Settings2.html">Settings</a></li>
-        </ul>
-      </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link text-dark" href="Home2.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Orders2.html">Orders</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="index.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="gifts2.html">Gifts</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="Invoice2.html">Invoice</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="sales-history2.html">Sales History</a></li>
+        <li class="nav-item"><a class="nav-link text-danger" href="Settings2.html">Settings</a></li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
+  
 
   <!-- Invoice Section -->
   <div class="container my-5">
@@ -224,8 +277,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
