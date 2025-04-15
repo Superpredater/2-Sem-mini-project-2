@@ -8,21 +8,25 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
-      background: linear-gradient(to bottom right, #ffffff, #f0f0f0);
+        background: linear-gradient(to right, #1a1a2e, #16213e);
       min-height: 100vh;
       font-family: Arial, sans-serif;
     }
 
     .top-nav {
-      background-color: #0080ff;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 1000; /* Ensure it stays above other content */
-    }
-
+        background: #dcdcdc;
+        padding: 20px 20px 10px 20px; /* Increase top padding to add space */
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-radius: 10px;
+        margin: 20px auto 0; /* Adds space above the nav bar */
+        width: 100 ;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      
     .top-nav a {
-      color: white;
+      color: rgb(0, 0, 0);
       font-weight: bold;
       margin-right: 20px;
       text-decoration: none;
@@ -78,20 +82,26 @@
       size: A4;
       margin: 20mm;
     }
+    .logo1{
+        border-radius:50%;
+    }
   </style>
 </head>
 <body>
   <!-- Custom Top Navigation -->
-  <div class="top-nav d-flex align-items-center">
-    <img src="logo3.jpg" alt="Logo"> 
-    <a href="Home2.html">Home</a>
-    <a href="Orders2.html">Orders</a>
-    <a href="gifts2.html">Gifts</a>
-    <a href="index.html">Dashboard</a>
-    <a href="Invoice2.html">Invoice</a>
-    <a href="sales-history2.html">Sales History</a>
-    <a href="Settings2.html">Settings</a>
+  <div class="top-nav d-flex justify-content-center align-items-center flex-wrap">
+    <img src="logo3.jpg" alt="Logo" class="logo1 me-3">
+    <div class="d-flex flex-wrap justify-content-center">
+      <a href="Home2.html">Home</a>
+      <a href="Orders2.html">Orders</a>
+      <a href="gifts2.html">Gifts</a>
+      <a href="index.html">Dashboard</a>
+      <a href="Invoice2.html">Invoice</a>
+      <a href="sales-history2.html">Sales History</a>
+      <a href="Settings2.html">Settings</a>
+    </div>
   </div>
+  
 
   <!-- Main Content -->
   <div class="container text-center">
@@ -127,7 +137,3 @@
   </div>
 </body>
 </html>
-
-
-
-
