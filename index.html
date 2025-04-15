@@ -10,7 +10,7 @@
             font-family: Arial, sans-serif; 
             text-align: center; 
             background: linear-gradient(to right, #1a1a2e, #16213e);
-            color: white;
+            color: rgb(255, 255, 255);
             margin: 0;
             padding: 20px;
         }
@@ -22,21 +22,40 @@
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         }
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        thead th {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }             
         nav {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(250, 247, 247, 0.895);
             padding: 10px;
             text-align: center;
+            border-radius: 10px; /* <-- Rounded corners */
+            margin-bottom: 20px; /* Optional spacing below nav */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Optional soft shadow for a "lifted" look */
+            position: sticky;
+            top: 0;
+            z-index: 1000; 
         }
         nav ul {
             list-style: none;
             padding: 0;
+            position: sticky;
         }
         nav ul li {
             display: inline;
             margin: 0 10px;
         }
         nav ul li a {
-            color: white;
+            color: rgb(0, 0, 0);
             text-decoration: none;
             font-weight: bold;
         }
@@ -44,22 +63,22 @@
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 20px; 
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 253, 253, 0.864);
             border-radius: 5px;
             overflow: hidden;
         }
         th, td { 
-            border: 1px solid white; 
+            border: 1px solid rgb(0, 0, 0); 
             padding: 10px; 
             text-align: left; 
-            color: white;
+            color: rgb(0, 0, 0);
         }
         th { 
             background: rgba(255, 255, 255, 0.2);
         }
         button { 
             background: #0f3460; 
-            color: white; 
+            color: rgb(255, 255, 255); 
             border: none; 
             padding: 10px 15px; 
             cursor: pointer;
@@ -76,10 +95,10 @@
             margin: 5px;
             width: 40%;
             background: rgba(255, 255, 255, 0.2);
-            color: white;
+            color: rgb(255, 255, 255);
         }
         input::placeholder {
-            color: #ccc;
+            color: #ffffff;
         }
     </style>
 </head>
@@ -106,16 +125,21 @@
         <button onclick="addProduct()">Add Product</button>
         <button onclick="orderNow()">Order now</button>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Sales</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="productTable"></tbody>
-        </table>
+       <!-- inside <body>, just replace your <table> section with this: -->
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Sales</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="productTable"></tbody>
+    </table>
+</div>
+
     </div>
 
     <script>
