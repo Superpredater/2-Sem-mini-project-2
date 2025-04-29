@@ -14,20 +14,6 @@
             margin: 0;
             padding: 20px;
         }
-
-        .main-logo {
-            height: 70px;
-            border-radius: 15px;
-            margin: 10px auto;
-            display: block;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .main-logo:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
-        }
-
         .container { 
             max-width: 800px; 
             margin: auto; 
@@ -36,73 +22,82 @@
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
         }
-
         .table-container {
             max-height: 300px;
             overflow-y: auto;
             margin-top: 20px;
             border-radius: 5px;
         }
-
+        
+        /* Add this for sticky header support */
         table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed;
-            margin-top: 20px; 
-            background: rgba(255, 253, 253, 0.864);
-            border-radius: 5px;
-            overflow: hidden;
+            table-layout: fixed; /* <-- This helps sticky headers behave more reliably */
         }
-
+        
         thead th {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.8);
-            color: black;
+            background: rgba(255, 255, 255, 0.8); /* higher opacity for readability */
+            color: black; /* to contrast better */
             z-index: 10;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px); /* Optional: for a modern glassy look */
         }
-
         th, td {
             padding: 10px;
             text-align: left;
             word-wrap: break-word;
-            border: 1px solid rgb(0, 0, 0); 
-            color: rgb(0, 0, 0);
-        }
-
-        th {
-            background: rgba(255, 255, 255, 0.2);
         }
 
         nav {
             background: rgba(250, 247, 247, 0.895);
             padding: 10px;
             text-align: center;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 10px; /* <-- Rounded corners */
+            margin-bottom: 20px; /* Optional spacing below nav */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Optional soft shadow for a "lifted" look */
             position: sticky;
             top: 0;
             z-index: 1000; 
         }
-
         nav ul {
             list-style: none;
             padding: 0;
+            position: sticky;
         }
-
         nav ul li {
             display: inline;
             margin: 0 10px;
         }
-
         nav ul li a {
             color: rgb(0, 0, 0);
             text-decoration: none;
             font-weight: bold;
         }
-
+        nav img {
+            height: 35px; /* Adjust logo size */
+            margin-right: 25px;
+            margin-top:5px;
+            border-radius:50%;
+          }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px; 
+            background: rgba(255, 253, 253, 0.864);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        th, td { 
+            border: 1px solid rgb(0, 0, 0); 
+            padding: 10px; 
+            text-align: left; 
+            color: rgb(0, 0, 0);
+        }
+        th { 
+            background: rgba(255, 255, 255, 0.2);
+        }
         button { 
             background: #0f3460; 
             color: rgb(255, 255, 255); 
@@ -112,11 +107,9 @@
             border-radius: 5px;
             transition: 0.3s;
         }
-
         button:hover { 
             background: #e94560; 
         }
-
         input {
             padding: 10px;
             border-radius: 5px;
@@ -126,51 +119,54 @@
             background: rgba(255, 255, 255, 0.2);
             color: rgb(255, 255, 255);
         }
-
         input::placeholder {
             color: #ffffff;
         }
     </style>
 </head>
 <body>
-
-    <!-- Centered glowing logo above nav -->
-    <img src="Logo3.jpg" alt="Logo" class="main-logo">
-
     <nav>
         <ul>
-            <li><a class="dropdown-item" href="Home2.html">Home</a></li>
-            <li><a class="dropdown-item" href="Orders2.html">Orders</a></li>
-            <li><a class="dropdown-item" href="index.html">Dashboard</a></li>
-            <li><a class="dropdown-item" href="gifts2.html">Gifts</a></li>
-            <li><a class="dropdown-item" href="Invoice2.html">Invoice</a></li>
-            <li><a class="dropdown-item" href="sales-history2.html">Sales History</a></li>
-            <li><a class="dropdown-item text-danger" href="Settings2.html">Settings</a></li>
+            <div class="top-nav d-flex align-items-center">
+                <img src="logo3.jpg" alt="Logo" class="logo1"> 
+             <li><a class="dropdown-item" href="Home2.html">Home</a></li>
+             <li><a class="dropdown-item" href="Orders2.html">Orders</a></li>
+             <li><a class="dropdown-item" href="index.html">Dashboard</a></li>
+             <li><a class="dropdown-item" href="gifts2.html">Gifts</a></li>
+             <li><a class="dropdown-item" href="Invoice2.html">Invoice</a></li>
+             <li><a class="dropdown-item" href="sales-history2.html">Sales History</a></li>
+             <li><a class="dropdown-item text-danger" href="Settings2.html">Settings</a></li>
+            </div>
         </ul>
     </nav>
-
+    
     <div class="container">
         <h2>Product Sales Line Graph</h2>
         <canvas id="salesChart"></canvas>
 
         <h2>Manage Products</h2>
         <input type="text" id="productName" placeholder="Product Name">
+        <input type="number" id="productPrice" placeholder="Price">
         <input type="number" id="productSales" placeholder="Sales">
         <button onclick="addProduct()">Add Product</button>
         <button onclick="orderNow()">Order now</button>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Sales</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="productTable"></tbody>
-            </table>
-        </div>
+       <!-- inside <body>, just replace your <table> section with this: -->
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Sales</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="productTable"></tbody>
+    </table>
+</div>
+
     </div>
 
     <script>
@@ -231,21 +227,24 @@
         function addProduct() {
             const name = document.getElementById('productName').value.trim();
             const sales = parseInt(document.getElementById('productSales').value);
-
-            if (!name || isNaN(sales) || sales < 0) {
-                alert("Please enter a valid product name and positive sales number.");
+            const price = parseFloat(document.getElementById('productPrice').value);
+        
+            if (!name || isNaN(sales) || sales < 0 || isNaN(price) || price < 0) {
+                alert("Please enter a valid product name, positive price, and positive sales number.");
                 return;
             }
-
-            products.push({ name, sales });
+        
+            products.push({ name, sales, price });
             localStorage.setItem('products', JSON.stringify(products));
-
+        
             document.getElementById('productName').value = "";
             document.getElementById('productSales').value = "";
-
+            document.getElementById('productPrice').value = "";
+        
             renderTable();
             updateChart();
         }
+        
 
         function deleteProduct(index) {
             products.splice(index, 1);
@@ -260,37 +259,38 @@
             products.forEach((p, index) => {
                 table.innerHTML += `<tr>
                     <td>${p.name}</td>
+                    <td>${p.price.toFixed(2)}</td>
                     <td>${p.sales}</td>
                     <td><button onclick="deleteProduct(${index})">Delete</button></td>
                 </tr>`;
             });
         }
-
         function orderNow() {
             if (products.length === 0) {
                 alert("No products added yet!");
                 return;
             }
-
+        
+            // Convert products into orders
             const newOrders = products.map(p => ({
                 product: p.name,
                 quantity: p.sales,
-                customer: "Self",
+                customer: "Self", // optional static name or add a field to get user input
                 date: new Date().toISOString().split('T')[0]
             }));
-
+        
+            // Get existing orders and append new ones
             const existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
             const allOrders = existingOrders.concat(newOrders);
-
+        
+            // Save orders to localStorage
             localStorage.setItem('orders', JSON.stringify(allOrders));
             localStorage.setItem('ordersUpdated', Date.now());
-
+        
             alert("Your order has been placed!");
             window.location.href = "Orders2.html";
         }
-
-        renderTable();
-        updateChart();
+        
     </script>
 </body>
 </html>
