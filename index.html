@@ -146,7 +146,6 @@
 
         <h2>Manage Products</h2>
         <input type="text" id="productName" placeholder="Product Name">
-        <input type="number" id="productPrice" placeholder="Price">
         <input type="number" id="productSales" placeholder="Sales">
         <button onclick="addProduct()">Add Product</button>
         <button onclick="orderNow()">Order now</button>
@@ -158,7 +157,6 @@
         <thead>
             <tr>
                 <th>Product</th>
-                <th>Price</th>
                 <th>Sales</th>
                 <th>Action</th>
             </tr>
@@ -227,24 +225,21 @@
         function addProduct() {
             const name = document.getElementById('productName').value.trim();
             const sales = parseInt(document.getElementById('productSales').value);
-            const price = parseFloat(document.getElementById('productPrice').value);
-        
-            if (!name || isNaN(sales) || sales < 0 || isNaN(price) || price < 0) {
-                alert("Please enter a valid product name, positive price, and positive sales number.");
+
+            if (!name || isNaN(sales) || sales < 0) {
+                alert("Please enter a valid product name and positive sales number.");
                 return;
             }
-        
-            products.push({ name, sales, price });
+
+            products.push({ name, sales });
             localStorage.setItem('products', JSON.stringify(products));
-        
+
             document.getElementById('productName').value = "";
             document.getElementById('productSales').value = "";
-            document.getElementById('productPrice').value = "";
-        
+
             renderTable();
             updateChart();
         }
-        
 
         function deleteProduct(index) {
             products.splice(index, 1);
@@ -259,7 +254,6 @@
             products.forEach((p, index) => {
                 table.innerHTML += `<tr>
                     <td>${p.name}</td>
-                    <td>${p.price.toFixed(2)}</td>
                     <td>${p.sales}</td>
                     <td><button onclick="deleteProduct(${index})">Delete</button></td>
                 </tr>`;
