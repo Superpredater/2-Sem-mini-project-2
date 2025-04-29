@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code Payment</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script> <!-- QR Code JS -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #141E30, #243B55);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .payment-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .payment-box:hover {
+      transform: scale(1.02);
+    }
+
+    .qr-box {
+      border: 2px dashed #6c757d;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .qr-box img {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+    }
+
+    .btn-glow {
+      background-color: #28a745;
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      font-size: 18px;
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .btn-glow:hover {
+      box-shadow: 0 0 20px #28a745;
+    }
+
+    .spinner-border {
+      display: none;
+    }
+
+    .status-message {
+      margin-top: 20px;
+      font-size: 16px;
+      color: #f8f9fa;
+    }
+
+    /* Enhanced responsiveness */
+    @media (max-width: 576px) {
+      .payment-box {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="payment-box">
+    <h2>Scan & Pay</h2>
+    <p class="mb-4">Please scan the QR code below to complete your payment securely.</p>
+
+    <h4>Amount to be Paid: ₹<span id="amount">500</span></h4>
+
+    <div class="qr-box" id="qrcode"></div> <!-- QR code will be inserted here -->
+
+    <button id="payNow" class="btn btn-glow">Pay Now</button>
+    <div class="spinner-border text-light mt-3" role="status" id="loadingSpinner">
+      <span class="visually-hidden">Processing...</span>
+    </div>
+    <div class="status-message" id="statusMessage"></div>
+  </div>
+
+  <script>
+    // Define the amount and UPI details for QR generation
+    const amount = 500;  // Example amount
+    const upiID = 'merchant@upi';  // Example UPI ID
+    const name = 'Demo Merchant';
+    
+    // Generate UPI payment link for QR code
+    const upiLink = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+
+    // Generate the QR code dynamically with QRCode.js
+    new QRCode(document.getElementById("qrcode"), {
+      text: upiLink,  // The data to encode (UPI payment link)
+      width: 200,     // Width of the QR code
+      height: 200,    // Height of the QR code
+      colorDark: "#000000",  // Color of QR code (black)
+      colorLight: "#ffffff",  // Background color of QR code (white)
+      correctLevel: QRCode.CorrectLevel.H  // Error correction level
+    });
+
+    // Handle the payment button click
+    document.getElementById('payNow').addEventListener('click', () => {
+      const btn = document.getElementById('payNow');
+      const spinner = document.getElementById('loadingSpinner');
+      const statusMessage = document.getElementById('statusMessage');
+
+      btn.disabled = true;
+      spinner.style.display = 'inline-block';
+      statusMessage.textContent = "Confirming your payment...";
+
+      // Simulate payment process with a delay
+      setTimeout(() => {
+        // Here, you would typically call your backend to verify the payment status
+        const paymentStatus = 'success';  // Simulated payment status (can be 'success' or 'failure')
+
+        if (paymentStatus === 'success') {
+          localStorage.setItem('paymentStatus', 'Paid');
+          statusMessage.textContent = "Payment successful! Redirecting to your order summary...";
+          window.location.href = 'order2.html';  // Redirect to order summary page
+        } else {
+          statusMessage.textContent = "Payment failed. Please try again.";
+          btn.disabled = false;
+          spinner.style.display = 'none';
+        }
+      }, 3000); // Simulated delay (3 seconds)
+    });
+  </script>
+
+</body>
+</html>
+
+
+
