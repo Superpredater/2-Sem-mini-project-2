@@ -72,6 +72,10 @@
     .profile-info p {
       font-size: 1.05rem;
     }
+
+    .logout-btn {
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
@@ -95,6 +99,9 @@
     <h3 class="mb-4">User Profile</h3>
     <img id="profilePic" src="default-avatar.png" alt="Profile Photo" class="profile-pic" />
     <div class="profile-info text-start">
+      <h5>Customer ID:</h5>
+      <p id="profileCustomerId">-</p>
+
       <h5>Name:</h5>
       <p id="profileName">-</p>
 
@@ -110,10 +117,22 @@
       <h5>Occupation:</h5>
       <p id="profileOccupation">-</p>
     </div>
+
+    <!-- Logout Button -->
+    <div class="text-center logout-btn">
+      <button class="btn btn-danger" onclick="logout()">Logout</button>
+    </div>
   </div>
 
   <script>
-    // Load data from localStorage (fallbacks shown)
+    // Generate or retrieve Customer ID
+    if (!localStorage.getItem("customerId")) {
+      const randomId = "CUST-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+      localStorage.setItem("customerId", randomId);
+    }
+    document.getElementById("profileCustomerId").textContent = localStorage.getItem("customerId");
+
+    // Load user data from localStorage
     document.getElementById("profileName").textContent = localStorage.getItem("name") || "N/A";
     document.getElementById("profilePhone").textContent = localStorage.getItem("phone") || "N/A";
     document.getElementById("profileAddress").textContent = localStorage.getItem("address") || "N/A";
@@ -123,6 +142,11 @@
     const photo = localStorage.getItem("photo");
     if (photo) {
       document.getElementById("profilePic").src = photo;
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "login.html";
     }
   </script>
 
