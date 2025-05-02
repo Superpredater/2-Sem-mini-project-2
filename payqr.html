@@ -135,7 +135,7 @@
         if (paymentStatus === 'success') {
           localStorage.setItem('paymentStatus', 'Paid');
           statusMessage.textContent = "Payment successful! Redirecting to your order summary...";
-          window.location.href = 'order2.html';  // Redirect to order summary page
+          window.location.href = 'Orders2.html';  // Redirect to order summary page
         } else {
           statusMessage.textContent = "Payment failed. Please try again.";
           btn.disabled = false;
