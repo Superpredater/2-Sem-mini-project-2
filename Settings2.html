@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Settings</title>
+  <title>Settings - IMS</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"/>
-
   <style>
     .hidden { display: none; }
 
@@ -43,6 +42,14 @@
 
 <body class="bg-light">
 
+<script>
+  // Redirect to login page if user not logged in
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || !user.email) {
+    window.location.href = "login.html";
+  }
+</script>
+
 <!-- 🔽 NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -74,17 +81,7 @@
 
 <!-- 🔧 MAIN CONTENT -->
 <div class="container py-5">
-  <!-- Login -->
-  <div id="loginSection" class="card p-4 shadow-sm">
-    <h3 class="mb-3">Login</h3>
-    <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email">
-    <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password">
-    <button class="btn btn-primary" onclick="login()">Login</button>
-    <p class="mt-3">Don't have an account? <a href="register.html">Register here</a></p> <!-- Register Link -->
-  </div>
-
-  <!-- Profile -->
-  <div id="profileSection" class="card p-4 shadow-sm hidden">
+  <div id="profileSection" class="card p-4 shadow-sm">
     <h3 class="mb-3">User Profile</h3>
     <img id="profileImage" class="profile-img mb-3" src="https://via.placeholder.com/100" alt="Profile Picture">
     <input type="text" id="profileName" class="form-control mb-3" placeholder="Name">
@@ -102,39 +99,14 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-  const backendURL = 'http://127.0.0.1:5500'; // Update if needed
-
   window.onload = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) showProfile(user);
   };
 
-  function login() {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-
-    fetch(`${backendURL}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-        showProfile(data.user);
-      } else {
-        Swal.fire("Login Failed", data.message, "error");
-      }
-    })
-    .catch(() => Swal.fire("Server Error", "Could not connect to server.", "error"));
-  }
-
   function showProfile(user) {
-    document.getElementById("loginSection").classList.add("hidden");
-    document.getElementById("profileSection").classList.remove("hidden");
-    document.getElementById("profileName").value = user.username || user.name;
-    document.getElementById("profileEmail").value = user.email;
+    document.getElementById("profileName").value = user.username || user.name || "";
+    document.getElementById("profileEmail").value = user.email || "";
     document.getElementById("profileImage").src = user.profile_pic || "https://via.placeholder.com/100";
   }
 
@@ -143,7 +115,13 @@
     const email = document.getElementById("profileEmail").value;
     const image = document.getElementById("profileImage").src;
 
-    const updatedUser = { ...JSON.parse(localStorage.getItem("user")), username: name, email, profile_pic: image };
+    const updatedUser = {
+      ...JSON.parse(localStorage.getItem("user")),
+      username: name,
+      email: email,
+      profile_pic: image
+    };
+
     localStorage.setItem("user", JSON.stringify(updatedUser));
 
     Swal.fire({
@@ -170,12 +148,6 @@
     });
   }
 
-  function logout() {
-    localStorage.removeItem("user");
-    document.getElementById("profileSection").classList.add("hidden");
-    document.getElementById("loginSection").classList.remove("hidden");
-  }
-
   function logoutUser() {
     Swal.fire({
       title: "Confirm Logout",
@@ -186,10 +158,14 @@
       cancelButtonText: "Cancel"
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("user");
-        window.location.href = "Settings2.html";
+        logout();
       }
     });
+  }
+
+  function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "login.html";
   }
 
   function previewImage(event) {
@@ -203,5 +179,3 @@
 
 </body>
 </html>
-
-
