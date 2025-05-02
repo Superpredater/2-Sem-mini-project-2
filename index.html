@@ -3,25 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Sales Management</title>
+    <title>Product Overview</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
+        body {
+            font-family: Arial, sans-serif;
             background: linear-gradient(to right, #1a1a2e, #16213e);
-            color: rgb(255, 255, 255);
+            color: white;
             margin: 0;
             padding: 20px;
+            text-align: center;
         }
-        .container { 
-            max-width: 800px; 
-            margin: auto; 
+
+        .container {
+            max-width: 900px;
+            margin: auto;
             background: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
+
+        canvas {
+            margin-bottom: 20px;
+            display: none; /* Hide the canvas initially */
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 5px;
+            width: 28%;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        input::placeholder {
+            color: white;
+        }
+
+        button {
+            background: #0f3460;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #e94560;
+        }
+
         .table-container {
             max-height: 300px;
             overflow-y: auto;
@@ -29,34 +65,13 @@
             border-radius: 5px;
         }
         
-        /* Add this for sticky header support */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed; /* <-- This helps sticky headers behave more reliably */
-        }
-        
-        thead th {
-            position: sticky;
-            top: 0;
-            background: rgba(255, 255, 255, 0.8); /* higher opacity for readability */
-            color: black; /* to contrast better */
-            z-index: 10;
-            backdrop-filter: blur(5px); /* Optional: for a modern glassy look */
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            word-wrap: break-word;
-        }
-
         nav {
             background: rgba(250, 247, 247, 0.895);
             padding: 10px;
             text-align: center;
-            border-radius: 10px; /* <-- Rounded corners */
-            margin-bottom: 20px; /* Optional spacing below nav */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Optional soft shadow for a "lifted" look */
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 1000; 
@@ -76,52 +91,33 @@
             font-weight: bold;
         }
         nav img {
-            height: 35px; /* Adjust logo size */
+            height: 35px;
             margin-right: 25px;
             margin-top:5px;
             border-radius:50%;
-          }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 20px; 
-            background: rgba(255, 253, 253, 0.864);
-            border-radius: 5px;
-            overflow: hidden;
         }
-        th, td { 
-            border: 1px solid rgb(0, 0, 0); 
-            padding: 10px; 
-            text-align: left; 
-            color: rgb(0, 0, 0);
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
         }
-        th { 
-            background: rgba(255, 255, 255, 0.2);
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+            z-index: 10;
         }
-        button { 
-            background: #0f3460; 
-            color: rgb(255, 255, 255); 
-            border: none; 
-            padding: 10px 15px; 
-            cursor: pointer;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-        button:hover { 
-            background: #e94560; 
-        }
-        input {
+
+        th, td {
+            border: 1px solid black;
             padding: 10px;
-            border-radius: 5px;
-            border: none;
-            margin: 5px;
-            width: 40%;
-            background: rgba(255, 255, 255, 0.2);
-            color: rgb(255, 255, 255);
+            text-align: left;
         }
-        input::placeholder {
-            color: #ffffff;
-        }
+
     </style>
 </head>
 <body>
@@ -139,152 +135,181 @@
             </div>
         </ul>
     </nav>
-    
     <div class="container">
-        <h2>Product Sales Line Graph</h2>
-        <canvas id="salesChart"></canvas>
+        <h2>Product Price & Quantity Line Graph</h2>
+        <canvas id="productChart"></canvas>
 
-        <h2>Manage Products</h2>
         <input type="text" id="productName" placeholder="Product Name">
-        <input type="number" id="productSales" placeholder="Sales">
+        <input type="number" id="productQuantity" placeholder="Quantity">
+        <input type="number" id="productPrice" placeholder="Price">
+        <br>
         <button onclick="addProduct()">Add Product</button>
-        <button onclick="orderNow()">Order now</button>
+        <button onclick="orderNow()">Order Now</button>
 
-       <!-- inside <body>, just replace your <table> section with this: -->
-
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Sales</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="productTable"></tbody>
-    </table>
-</div>
-
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        let products = JSON.parse(localStorage.getItem('products')) || [];
+        let products = JSON.parse(localStorage.getItem('productsIndex')) || [];
         let chart;
 
         function updateChart() {
             const labels = products.map(p => p.name);
-            const salesData = products.map(p => p.sales);
+            const quantityData = products.map(p => p.quantity);
+            const priceData = products.map(p => p.price);
 
             if (chart) chart.destroy();
 
-            const ctx = document.getElementById('salesChart').getContext('2d');
+            const ctx = document.getElementById('productChart').getContext('2d');
             chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: 'Product Sales',
-                        data: salesData,
-                        borderColor: '#e94560',
-                        backgroundColor: 'rgba(233, 69, 96, 0.3)',
-                        fill: true,
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#e94560',
-                        tension: 0.4
-                    }]
+                    datasets: [
+                        {
+                            label: 'Quantity',
+                            data: quantityData,
+                            borderColor: '#00bcd4',
+                            backgroundColor: 'rgba(0, 188, 212, 0.3)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#00bcd4'
+                        },
+                        {
+                            label: 'Price',
+                            data: priceData,
+                            borderColor: '#e94560',
+                            backgroundColor: 'rgba(233, 69, 96, 0.3)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#e94560'
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     animation: {
-                        duration: 1500,
+                        duration: 1000,
                         easing: 'easeOutBounce'
                     },
                     plugins: {
                         legend: {
-                            labels: { color: 'white' }
+                            labels: {
+                                color: 'white'
+                            }
                         }
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: 'Products', color: 'white' },
+                            title: {
+                                display: true,
+                                text: 'Products',
+                                color: 'white'
+                            },
                             ticks: { color: 'white' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' }
+                            grid: { color: 'rgba(255,255,255,0.2)' }
                         },
                         y: {
-                            title: { display: true, text: 'Sales Count', color: 'white' },
+                            title: {
+                                display: true,
+                                text: 'Value',
+                                color: 'white'
+                            },
                             beginAtZero: true,
                             ticks: { color: 'white' },
-                            grid: { color: 'rgba(255, 255, 255, 0.2)' }
+                            grid: { color: 'rgba(255,255,255,0.2)' }
                         }
                     }
                 }
             });
         }
 
-        function addProduct() {
-            const name = document.getElementById('productName').value.trim();
-            const sales = parseInt(document.getElementById('productSales').value);
-
-            if (!name || isNaN(sales) || sales < 0) {
-                alert("Please enter a valid product name and positive sales number.");
-                return;
-            }
-
-            products.push({ name, sales });
-            localStorage.setItem('products', JSON.stringify(products));
-
-            document.getElementById('productName').value = "";
-            document.getElementById('productSales').value = "";
-
-            renderTable();
-            updateChart();
-        }
-
-        function deleteProduct(index) {
-            products.splice(index, 1);
-            localStorage.setItem('products', JSON.stringify(products));
-            renderTable();
-            updateChart();
-        }
-
         function renderTable() {
             const table = document.getElementById('productTable');
             table.innerHTML = '';
             products.forEach((p, index) => {
-                table.innerHTML += `<tr>
-                    <td>${p.name}</td>
-                    <td>${p.sales}</td>
-                    <td><button onclick="deleteProduct(${index})">Delete</button></td>
-                </tr>`;
+                table.innerHTML += `
+                    <tr>
+                        <td>${p.name}</td>
+                        <td>${p.quantity}</td>
+                        <td>${p.price}</td>
+                        <td><button onclick="deleteProduct(${index})">Delete</button></td>
+                    </tr>`;
             });
         }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const price = parseFloat(document.getElementById('productPrice').value);
+
+            if (!name || isNaN(quantity) || quantity < 0 || isNaN(price) || price < 0) {
+                alert("Please enter valid product data.");
+                return;
+            }
+
+            products.push({ name, quantity, price });
+            localStorage.setItem('productsIndex', JSON.stringify(products));
+
+            document.getElementById('productName').value = "";
+            document.getElementById('productQuantity').value = "";
+            document.getElementById('productPrice').value = "";
+
+            renderTable();
+            updateChart();
+
+            // Show the canvas when a product is added
+            document.getElementById('productChart').style.display = 'block';
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            localStorage.setItem('productsIndex', JSON.stringify(products));
+            renderTable();
+            updateChart();
+        }
+
         function orderNow() {
             if (products.length === 0) {
                 alert("No products added yet!");
                 return;
             }
-        
-            // Convert products into orders
+
             const newOrders = products.map(p => ({
                 product: p.name,
-                quantity: p.sales,
-                customer: "Self", // optional static name or add a field to get user input
+                quantity: p.quantity,
+                price: p.price,
+                customer: "Self",
                 date: new Date().toISOString().split('T')[0]
             }));
-        
-            // Get existing orders and append new ones
-            const existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
+
+            const existingOrders = JSON.parse(localStorage.getItem('ordersIndex')) || [];
             const allOrders = existingOrders.concat(newOrders);
-        
-            // Save orders to localStorage
-            localStorage.setItem('orders', JSON.stringify(allOrders));
-            localStorage.setItem('ordersUpdated', Date.now());
-        
-            alert("Your order has been placed!");
+
+            localStorage.setItem('ordersIndex', JSON.stringify(allOrders));
+            localStorage.setItem('ordersUpdatedIndex', Date.now());
+
+            alert("Order placed successfully!");
             window.location.href = "Orders2.html";
         }
-        
+
+        // Initialize on page load
+        renderTable();
+        updateChart();
     </script>
 </body>
 </html>
